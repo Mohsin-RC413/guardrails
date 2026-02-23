@@ -1,4 +1,6 @@
+import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.models import TextRequest, FullProcessRequest
 from app.validators import (
     guard_pii,
@@ -10,6 +12,24 @@ from app.validators import (
 from app.groq_client import generate_response
 
 app = FastAPI(title="Guardrails LLM Backend")
+
+cors_origins = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:3000,http://127.0.0.1:3000",
+).split(",")
+cors_origin_regex = os.getenv(
+    "CORS_ORIGIN_REGEX",
+    r"http://(localhost|127\.0\.0\.1):\d+",
+).strip()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[origin.strip() for origin in cors_origins if origin.strip()],
+    allow_origin_regex=cors_origin_regex or None,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # -------------------------------
 # Individual Guardrail Endpoints

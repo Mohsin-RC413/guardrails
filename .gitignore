@@ -16,6 +16,9 @@ __pycache__/
 .ruff_cache/
 .coverage
 *.log
+node_modules/
+frontend/.next/
+frontend/out/
 
 Thumbs.db
 .DS_Store
