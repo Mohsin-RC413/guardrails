@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+guardrails-ai
+guardrails-ai[hub]
+guardrails-ai[cli]
+groq
+python-dotenv
+pydantic
