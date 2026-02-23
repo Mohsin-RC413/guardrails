@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import Image from "next/image";
 import type { FormEvent } from "react";
+import { useMemo, useState } from "react";
+import royalLogo from "../../img/royal-cyber.png";
 
 type ValidatorId = "pii" | "gibberish" | "toxic" | "nsfw" | "full";
 
@@ -20,6 +22,39 @@ type ChatMessage = {
 };
 
 type ResponseData = Record<string, unknown>;
+
+const iconMap: Record<ValidatorId, JSX.Element> = {
+  pii: (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="4" y="4" width="16" height="16" rx="3" />
+      <path d="M8 9h8M8 12h8M8 15h5" />
+    </svg>
+  ),
+  gibberish: (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 7h10M4 11h6M4 15h12" />
+      <path d="M16 11l4 4m0-4l-4 4" />
+    </svg>
+  ),
+  toxic: (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3c2 4 6 5 6 10a6 6 0 1 1-12 0c0-5 4-6 6-10z" />
+      <path d="M9.5 14.5l5-5" />
+    </svg>
+  ),
+  nsfw: (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 12s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5z" />
+      <circle cx="12" cy="12" r="2.5" />
+    </svg>
+  ),
+  full: (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3l3 3-3 3-3-3 3-3zM5 10h14v9H5z" />
+      <path d="M8 13h8M8 16h5" />
+    </svg>
+  ),
+};
 
 const validators: ValidatorConfig[] = [
   {
@@ -188,10 +223,12 @@ export default function Home() {
 
       <header className="topbar">
         <div className="brand">
-          <div className="brand-mark">GR</div>
+          <div className="brand-logo">
+            <Image src={royalLogo} alt="Royal Cyber" width={144} height={144} />
+          </div>
           <div>
-            <h1>Guardrails Validator Studio</h1>
-            <div className="meta">FastAPI live testing console</div>
+            <h1>Royal Cyber Guardrails Validator Studio</h1>
+            <div className="meta">Live testing console</div>
           </div>
         </div>
         <div className="status-pill">
@@ -236,9 +273,14 @@ export default function Home() {
 
         <section className="panel">
           <div className="panel-header">
-            <div>
-              <h3>{active.label}</h3>
-              <p>{active.description}</p>
+            <div className="panel-title">
+              <div className={`panel-logo panel-logo--${active.id}`} aria-hidden="true">
+                {iconMap[active.id]}
+              </div>
+              <div>
+                <h3>{active.label}</h3>
+                <p>{active.description}</p>
+              </div>
             </div>
           </div>
 
@@ -252,7 +294,7 @@ export default function Home() {
             {messages.map((message, index) => (
               <div key={`${message.role}-${index}`} className="chat-stack">
                 <div className="chat-label">
-                  {message.role === "user" ? "Prompt" : "Masked Prompt"}
+                  {message.role === "user" ? "Prompt" : "Validator Response"}
                 </div>
                 <div className={`chat-bubble ${message.role}`}>
                   {message.content}

@@ -14,7 +14,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Guardrails Validator Studio",
+  title: "Royal Cyber Guardrails Validator Studio",
   description: "Test FastAPI guardrail validators with a focused UI.",
 };
 
